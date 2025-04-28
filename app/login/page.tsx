@@ -179,32 +179,42 @@ export default function Login() {
     }
   }
 
-  // Check if email already exists
+  // Check if email already exists - FIXED VERSION
   const checkEmailExists = async (email: string) => {
     try {
-      const { data, error } = await supabase.auth.signInWithOtp({
+      // First, try to get the user directly
+      const { data: userData, error: userError } = await supabase.auth.admin.getUserByEmail(email)
+
+      // If we successfully got a user, the email exists
+      if (userData && userData.user) {
+        return true
+      }
+
+      // If we got a specific error about the user not existing, the email doesn't exist
+      if (userError && userError.message.includes("user not found")) {
+        return false
+      }
+
+      // If we can't determine directly, try the sign-in method as fallback
+      const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
           shouldCreateUser: false,
         },
       })
 
-      if (error) {
-        // If the error is about user not found, then the email doesn't exist
-        if (error.message.includes("user not found")) {
-          return false
-        }
-        // For other errors, we'll assume the email might exist
-        console.error("Error checking email:", error)
-        return true
+      // If the error specifically mentions user not found, the email doesn't exist
+      if (error && error.message.includes("user not found")) {
+        return false
       }
 
-      // If we get here, the email exists
-      return true
+      // For any other error or if we can't determine, proceed with registration
+      // This is safer than blocking registration incorrectly
+      return false
     } catch (error) {
       console.error("Exception checking email:", error)
-      // In case of exception, we'll be cautious and assume the email might exist
-      return true
+      // In case of exception, allow registration to proceed
+      return false
     }
   }
 
@@ -215,20 +225,20 @@ export default function Login() {
     setSignupSuccess(false)
 
     try {
-      // Check if email already exists
-      const emailExists = await checkEmailExists(email)
-
-      if (emailExists) {
-        setError("An account with this email already exists. Please sign in instead.")
-        toast({
-          title: "Email already registered",
-          description: "Please sign in with your existing account.",
-          variant: "destructive",
-        })
-        setActiveTab("login")
-        setLoading(false)
-        return
-      }
+      // Skip email check for now - it's causing false positives
+      // const emailExists = await checkEmailExists(email)
+      //
+      // if (emailExists) {
+      //   setError("An account with this email already exists. Please sign in instead.")
+      //   toast({
+      //     title: "Email already registered",
+      //     description: "Please sign in with your existing account.",
+      //     variant: "destructive",
+      //   })
+      //   setActiveTab("login")
+      //   setLoading(false)
+      //   return
+      // }
 
       // Get the site URL for redirect
       const siteUrl =
@@ -248,6 +258,18 @@ export default function Login() {
       })
 
       if (error) {
+        // Check if the error is about the email already being registered
+        if (error.message.includes("already registered")) {
+          setError("An account with this email already exists. Please sign in instead.")
+          toast({
+            title: "Email already registered",
+            description: "Please sign in with your existing account.",
+            variant: "destructive",
+          })
+          setActiveTab("login")
+          return
+        }
+
         // Check for rate limit error
         if (error.message.includes("security purposes") || error.message.includes("rate limit")) {
           throw new Error("Please wait a moment before trying again. We have a limit on sign-up attempts.")

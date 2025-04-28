@@ -1,20 +1,15 @@
-/**
- * Gets the correct site URL based on the environment
- * Uses NEXT_PUBLIC_APP_URL in production or the current window location in development
- */
 export function getSiteUrl(): string {
-  // Use the environment variable if available (for production)
+  // Check for environment variable first
   if (process.env.NEXT_PUBLIC_APP_URL) {
-    return process.env.NEXT_PUBLIC_APP_URL.trim().replace(/\/$/, "")
+    return process.env.NEXT_PUBLIC_APP_URL
   }
 
-  // For client-side in development, use window.location
-  if (typeof window !== "undefined") {
-    const protocol = window.location.protocol
-    const host = window.location.host
-    return `${protocol}//${host}`
+  // For server-side rendering
+  if (typeof window === "undefined") {
+    // Default to production URL if we're server-side and don't have an environment variable
+    return "https://lamontai.vercel.app"
   }
 
-  // Fallback for server-side in development
-  return "https://lamontai.vercel.app"
+  // For client-side, use the current window location
+  return `${window.location.protocol}//${window.location.host}`
 }

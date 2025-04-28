@@ -83,7 +83,7 @@ export const config = {
     "/login",
     "/register",
     "/onboarding/:path*",
-    // Exclude auth callback route
-    "/((?!auth/callback).*)",
+    // Exclude auth callback route and API routes
+    "/((?!auth/callback|api|_next/static|_next/image|favicon.ico).*)",
   ],
 }
