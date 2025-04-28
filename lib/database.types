@@ -41,26 +41,6 @@ export interface Database {
           article_id?: string | null
         }
       }
-      article_keywords: {
-        Row: {
-          id: string
-          article_id: string
-          keyword_id: string
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          article_id: string
-          keyword_id: string
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          article_id?: string
-          keyword_id?: string
-          created_at?: string
-        }
-      }
       articles: {
         Row: {
           id: string
@@ -75,9 +55,6 @@ export interface Database {
           language: string
           published_at: string | null
           word_count: number
-          content_plan_id: string | null
-          author_id: string | null
-          featured_image: string | null
         }
         Insert: {
           id?: string
@@ -92,9 +69,6 @@ export interface Database {
           language: string
           published_at?: string | null
           word_count?: number
-          content_plan_id?: string | null
-          author_id?: string | null
-          featured_image?: string | null
         }
         Update: {
           id?: string
@@ -109,9 +83,6 @@ export interface Database {
           language?: string
           published_at?: string | null
           word_count?: number
-          content_plan_id?: string | null
-          author_id?: string | null
-          featured_image?: string | null
         }
       }
       cms_connections: {
@@ -170,87 +141,6 @@ export interface Database {
           domain?: string
           created_at?: string
           updated_at?: string
-        }
-      }
-      content_plan_languages: {
-        Row: {
-          id: string
-          content_plan_id: string
-          language_id: string
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          content_plan_id: string
-          language_id: string
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          content_plan_id?: string
-          language_id?: string
-          created_at?: string
-        }
-      }
-      content_plans: {
-        Row: {
-          id: string
-          name: string
-          description: string
-          created_at: string
-          updated_at: string
-          organization_id: string
-          status: string
-          target_keywords: string[]
-        }
-        Insert: {
-          id?: string
-          name: string
-          description: string
-          created_at?: string
-          updated_at?: string
-          organization_id: string
-          status?: string
-          target_keywords?: string[]
-        }
-        Update: {
-          id?: string
-          name?: string
-          description?: string
-          created_at?: string
-          updated_at?: string
-          organization_id?: string
-          status?: string
-          target_keywords?: string[]
-        }
-      }
-      integrations: {
-        Row: {
-          id: string
-          organization_id: string
-          type: string
-          credentials: Json
-          created_at: string
-          updated_at: string
-          status: string
-        }
-        Insert: {
-          id?: string
-          organization_id: string
-          type: string
-          credentials: Json
-          created_at?: string
-          updated_at?: string
-          status?: string
-        }
-        Update: {
-          id?: string
-          organization_id?: string
-          type?: string
-          credentials?: Json
-          created_at?: string
-          updated_at?: string
-          status?: string
         }
       }
       keywords: {
