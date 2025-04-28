@@ -1,7 +1,7 @@
 {
   "version": 2,
   "buildCommand": "npm run build",
-  "installCommand": "node ./scripts/diagnose-deps.js && node ./scripts/check-shadcn.js && node ./scripts/check-tailwind.js && npm install",
+  "installCommand": "node ./scripts/cleanup.js && npm install --no-package-lock && node ./scripts/patch-workspace-deps.js",
   "framework": "nextjs",
   "env": {
     "NEXT_PUBLIC_APP_URL": "https://lamontai.vercel.app"
