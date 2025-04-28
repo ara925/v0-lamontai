@@ -6,9 +6,28 @@ import type { NextRequest } from "next/server"
 import type { Database } from "@/lib/database.types"
 import { getSiteUrl } from "@/lib/get-site-url"
 
+// At the top of the file, add this code to handle localhost redirects
+
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url)
   const code = requestUrl.searchParams.get("code")
+  const error = requestUrl.searchParams.get("error")
+  const error_description = requestUrl.searchParams.get("error_description")
+
+  // Check if we're on localhost but should be on production
+  if (requestUrl.hostname === "localhost" || requestUrl.hostname === "127.0.0.1") {
+    // Redirect to production with the same parameters
+    const productionUrl = new URL("https://lamontai.vercel.app/auth/callback")
+
+    // Copy all search parameters
+    requestUrl.searchParams.forEach((value, key) => {
+      productionUrl.searchParams.set(key, value)
+    })
+
+    return NextResponse.redirect(productionUrl)
+  }
+
+  // Rest of your existing code...
   const next = requestUrl.searchParams.get("next") || "/login"
   const siteUrl = getSiteUrl()
 

@@ -241,10 +241,7 @@ export default function Login() {
       // }
 
       // Get the site URL for redirect
-      const siteUrl =
-        typeof window !== "undefined"
-          ? `${window.location.protocol}//${window.location.host}`
-          : "https://lamontai.vercel.app"
+      const siteUrl = "https://lamontai.vercel.app"
 
       const { error, data } = await supabase.auth.signUp({
         email,
@@ -310,10 +307,7 @@ export default function Login() {
     setResendLoading(true)
     try {
       // Get the site URL for redirect
-      const siteUrl =
-        typeof window !== "undefined"
-          ? `${window.location.protocol}//${window.location.host}`
-          : "https://lamontai.vercel.app"
+      const siteUrl = "https://lamontai.vercel.app"
 
       console.log("Resending confirmation to:", email)
       console.log("Redirect URL:", `${siteUrl}/auth/callback`)

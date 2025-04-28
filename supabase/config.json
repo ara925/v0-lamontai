@@ -1,0 +1,9 @@
+{
+  "project_id": "your-project-id",
+  "api": {
+    "site_url": "https://lamontai.vercel.app",
+    "auth": {
+      "redirect_urls": ["https://lamontai.vercel.app/auth/callback"]
+    }
+  }
+}
